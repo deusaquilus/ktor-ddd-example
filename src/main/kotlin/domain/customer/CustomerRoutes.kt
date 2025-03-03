@@ -21,7 +21,61 @@ fun Application.customerRoutes() {
         val service = CustomerService(repository, eventPublisher)
 
         route("/customers") {
+            // Create customer
+            post {
+                val customer = call.receive<Customer>()
+                val createdCustomer = service.createCustomer(customer.name, customer.email)
+                call.respond(HttpStatusCode.Created, createdCustomer)
+            }
 
+            // Get customer by ID
+            get("/{id}") {
+                val id = call.parameters["id"] ?: return@get call.respondText(
+                    "Missing or malformed id",
+                    status = HttpStatusCode.BadRequest
+                )
+
+                val customer = service.getCustomer(id)
+                if (customer != null) {
+                    call.respond(customer)
+                } else {
+                    call.respondText("Customer not found", status = HttpStatusCode.NotFound)
+                }
+            }
+
+            // Add contact to customer
+            post("/{id}/contacts") {
+                val id = call.parameters["id"] ?: return@post call.respondText(
+                    "Missing or malformed id",
+                    status = HttpStatusCode.BadRequest
+                )
+
+                val contact = call.receive<Contact>()
+                val updatedCustomer = service.addContact(CustomerId(id), contact)
+
+                if (updatedCustomer != null) {
+                    call.respond(updatedCustomer)
+                } else {
+                    call.respondText("Customer not found", status = HttpStatusCode.NotFound)
+                }
+            }
+
+            // Add note to customer
+            post("/{id}/notes") {
+                val id = call.parameters["id"] ?: return@post call.respondText(
+                    "Missing or malformed id",
+                    status = HttpStatusCode.BadRequest
+                )
+
+                val note = call.receive<Note>()
+                val updatedCustomer = service.addNote(CustomerId(id), note)
+
+                if (updatedCustomer != null) {
+                    call.respond(updatedCustomer)
+                } else {
+                    call.respondText("Customer not found", status = HttpStatusCode.NotFound)
+                }
+            }
         }
     }
 }

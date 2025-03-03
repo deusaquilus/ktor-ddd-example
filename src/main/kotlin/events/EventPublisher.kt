@@ -8,7 +8,7 @@ interface EventPublisher {
 
 class EventPublisherImpl : EventPublisher {
     override fun publish(event: DomainEvent) {
-        TODO("Not yet implemented")
+        // For demo purposes, just print the event to console
+        println("Event published: $event")
     }
 }
-
