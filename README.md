@@ -1,42 +1,117 @@
-# ktor-ddd-example
+# Ktor DDD Example
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
+This is a demonstration project showcasing Domain-Driven Design (DDD) concepts implemented with Ktor framework. The project implements a mini-CRM system with customers and reminders functionality.
 
-Here are some useful links to get you started:
+## Technologies Used
 
-- [Ktor Documentation](https://ktor.io/docs/home.html)
-- [Ktor GitHub page](https://github.com/ktorio/ktor)
-- The [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). You'll need
-  to [request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) to join.
+- Kotlin
+- Ktor (Web framework)
+- kotlinx.serialization (JSON serialization)
+- JUnit (Testing)
 
-## Features
+## Project Structure
 
-Here's a list of features included in this project:
-
-| Name                                                                   | Description                                                                        |
-| ------------------------------------------------------------------------|------------------------------------------------------------------------------------ |
-| [Routing](https://start.ktor.io/p/routing)                             | Provides a structured routing DSL                                                  |
-| [Content Negotiation](https://start.ktor.io/p/content-negotiation)     | Provides automatic content conversion according to Content-Type and Accept headers |
-| [kotlinx.serialization](https://start.ktor.io/p/kotlinx-serialization) | Handles JSON serialization using kotlinx.serialization library                     |
-
-## Building & Running
-
-To build or run the project, use one of the following tasks:
-
-| Task                          | Description                                                          |
-| -------------------------------|---------------------------------------------------------------------- |
-| `./gradlew test`              | Run the tests                                                        |
-| `./gradlew build`             | Build everything                                                     |
-| `buildFatJar`                 | Build an executable JAR of the server with all dependencies included |
-| `buildImage`                  | Build the docker image to use with the fat JAR                       |
-| `publishImageToLocalRegistry` | Publish the docker image locally                                     |
-| `run`                         | Run the server                                                       |
-| `runDocker`                   | Run using the local docker image                                     |
-
-If the server starts successfully, you'll see the following output:
+The project follows DDD principles with a clear separation of domains:
 
 ```
-2024-12-04 14:32:45.584 [main] INFO  Application - Application started in 0.303 seconds.
-2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
+src/
+├── main/
+│   └── kotlin/
+│       ├── domain/
+│       │   ├── customer/         # Customer domain
+│       │   │   ├── Customer.kt   # Customer entity and value objects
+│       │   │   ├── CustomerRepository.kt
+│       │   │   ├── CustomerService.kt
+│       │   │   └── CustomerRoutes.kt
+│       │   └── reminder/         # Reminder domain
+│       │       ├── Reminder.kt   # Reminder entity
+│       │       ├── ReminderRepository.kt
+│       │       ├── ReminderService.kt
+│       │       └── ReminderRoutes.kt
+│       ├── events/              # Domain events
+│       ├── serialization/       # Custom serializers
+│       ├── Application.kt       # Application entry point
+│       └── Plugins.kt          # Ktor plugins configuration
+└── test/
+    └── kotlin/
+        └── ApplicationTest.kt   # Integration tests
 ```
 
+## API Endpoints
+
+### Customer Endpoints
+
+- `POST /customers` - Create a new customer
+  ```json
+  {
+    "name": "John Doe",
+    "email": "john@example.com"
+  }
+  ```
+
+- `GET /customers/{id}` - Get customer by ID
+
+- `POST /customers/{id}/contacts` - Add a contact to customer
+  ```json
+  {
+    "name": "Jane Doe",
+    "email": "jane@example.com",
+    "phone": "123-456-7890"
+  }
+  ```
+
+- `POST /customers/{id}/notes` - Add a note to customer
+  ```json
+  {
+    "content": "Customer meeting scheduled"
+  }
+  ```
+
+### Reminder Endpoints
+
+- `POST /reminders` - Create a new reminder
+  ```json
+  {
+    "customerId": {"value": "customer-uuid"},
+    "noteId": null,
+    "remindAt": "2024-01-01T10:00:00",
+    "message": "Follow up with customer"
+  }
+  ```
+
+- `GET /reminders/{id}` - Get reminder by ID
+
+- `GET /reminders/customer/{customerId}` - Get all reminders for a customer
+
+## Running the Project
+
+1. Clone the repository
+2. Run the application:
+   ```bash
+   ./gradlew run
+   ```
+3. The server will start at `http://localhost:8080`
+
+## Testing
+
+Run the tests using:
+```bash
+./gradlew test
+```
+
+## Domain-Driven Design Concepts Demonstrated
+
+- **Aggregates**: Customer as the main aggregate root
+- **Value Objects**: CustomerId, ContactId, NoteId
+- **Domain Events**: Contact and Note addition events
+- **Repositories**: In-memory implementations for Customer and Reminder
+- **Domain Services**: Business logic in CustomerService and ReminderService
+
+## Project Features
+
+- Clean separation of domains
+- Event-driven architecture
+- RESTful API design
+- Proper error handling
+- Comprehensive test coverage
+- Type-safe serialization
