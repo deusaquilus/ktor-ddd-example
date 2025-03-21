@@ -13,11 +13,13 @@ interface ReminderRepository {
 // Simple in-memory implementation of the ReminderRepository.
 class InMemoryReminderRepository : ReminderRepository {
     private val reminders = mutableMapOf<ReminderId, Reminder>()
+    private val sequence = java.util.concurrent.atomic.AtomicInteger(0)
 
     override fun findById(id: ReminderId): Reminder? = reminders[id]
 
     override fun save(reminder: Reminder) {
-        reminders[reminder.id] = reminder
+        val id = reminder.id ?: ReminderId(sequence.incrementAndGet().toLong())
+        reminders[id] = reminder.copy(id = id)
     }
 
     override fun findByContact(customerId: CustomerId): List<Reminder> =

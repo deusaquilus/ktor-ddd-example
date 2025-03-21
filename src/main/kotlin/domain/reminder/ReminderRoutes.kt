@@ -33,7 +33,7 @@ fun Application.reminderRoutes() {
 
             // Get reminder by ID
             get("/{id}") {
-                val id = call.parameters["id"] ?: return@get call.respondText(
+                val id = call.parameters["id"]?.toLongOrNull() ?: return@get call.respondText(
                     "Missing or malformed id",
                     status = HttpStatusCode.BadRequest
                 )
@@ -48,7 +48,7 @@ fun Application.reminderRoutes() {
 
             // Get reminders for customer
             get("/customer/{customerId}") {
-                val customerId = call.parameters["customerId"] ?: return@get call.respondText(
+                val customerId = call.parameters["customerId"]?.toLongOrNull() ?: return@get call.respondText(
                     "Missing or malformed customerId",
                     status = HttpStatusCode.BadRequest
                 )

@@ -8,11 +8,11 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Serializable
-data class ReminderId(val value: String)
+data class ReminderId(val value: Long)
 
 @Serializable
 data class Reminder(
-    val id: ReminderId = ReminderId(UUID.randomUUID().toString()),
+    val id: ReminderId? = null,
     val customerId: CustomerId, // always links to a customer
     val noteId: NoteId?, // Optionally linked to a note
     @Serializable(with = LocalDateTimeSerializer::class)
