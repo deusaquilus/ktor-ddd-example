@@ -4,7 +4,7 @@ import com.example.domain.customer.Contact
 import com.example.domain.customer.CustomerId
 import com.example.domain.customer.Note
 
-interface DomainEvent
+sealed interface DomainEvent
 
 data class ContactAddedEvent(
     val customerId: CustomerId,

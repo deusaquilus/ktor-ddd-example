@@ -9,13 +9,13 @@ class CustomerService(
     private val eventPublisher: EventPublisher
 ) {
 
-    fun createCustomer(name: String, email: String): Customer {
-        val customer = Customer(name = name, email = email)
+    fun createCustomer(name: String): Customer {
+        val customer = Customer(name = name)
         customerRepository.save(customer)
         return customer
     }
 
-    fun getCustomer(id: String): Customer? {
+    fun getCustomer(id: Long): Customer? {
         return customerRepository.findById(CustomerId(id))
     }
 
@@ -24,7 +24,7 @@ class CustomerService(
             ?: return null
 
         // Business logic to add a contact (could be a method on Customer entity)
-        val updatedCustomer = customer.copy(contacts = customer.contacts + contact)
+        val updatedCustomer = customer.withContact(contact)
         customerRepository.save(updatedCustomer)
 
         // Publish a domain event to signal that a new contact has been added
@@ -38,7 +38,7 @@ class CustomerService(
         val customer = customerRepository.findById(customerId)
             ?: return null
 
-        val updatedCustomer = customer.copy(notes = customer.notes + note)
+        val updatedCustomer = customer.withNote(note)
         customerRepository.save(updatedCustomer)
 
         // Publish a domain event to signal about a new note
