@@ -24,13 +24,13 @@ fun Application.customerRoutes() {
             // Create customer
             post {
                 val customer = call.receive<Customer>()
-                val createdCustomer = service.createCustomer(customer.name, customer.email)
+                val createdCustomer = service.createCustomer(customer.name)
                 call.respond(HttpStatusCode.Created, createdCustomer)
             }
 
             // Get customer by ID
             get("/{id}") {
-                val id = call.parameters["id"] ?: return@get call.respondText(
+                val id = call.parameters["id"]?.toLongOrNull() ?: return@get call.respondText(
                     "Missing or malformed id",
                     status = HttpStatusCode.BadRequest
                 )
@@ -45,7 +45,7 @@ fun Application.customerRoutes() {
 
             // Add contact to customer
             post("/{id}/contacts") {
-                val id = call.parameters["id"] ?: return@post call.respondText(
+                val id = call.parameters["id"]?.toLongOrNull() ?: return@post call.respondText(
                     "Missing or malformed id",
                     status = HttpStatusCode.BadRequest
                 )
@@ -62,7 +62,7 @@ fun Application.customerRoutes() {
 
             // Add note to customer
             post("/{id}/notes") {
-                val id = call.parameters["id"] ?: return@post call.respondText(
+                val id = call.parameters["id"]?.toLongOrNull() ?: return@post call.respondText(
                     "Missing or malformed id",
                     status = HttpStatusCode.BadRequest
                 )
