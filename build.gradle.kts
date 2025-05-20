@@ -5,7 +5,7 @@ plugins {
     kotlin("jvm") version "2.1.20"
     id("io.ktor.plugin") version "3.1.2"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.20"
-    id("io.exoquery.exoquery-plugin") version "2.1.20-1.2.3.PL"
+    id("io.exoquery.exoquery-plugin") version "2.1.20-LA.1.2.4.PL"
 }
 
 group = "com.example"
@@ -24,8 +24,21 @@ repositories {
 }
 
 dependencies {
-    implementation("io.exoquery:exoquery-runner-core:1.2.3.PL-1.2.3")
-    implementation("io.exoquery:exoquery-runner-jdbc:1.2.3.PL-1.2.3")
+    implementation("io.exoquery:exoquery-runner-core:LA.1.2.4.PL-LA.1.2.4")
+    implementation("io.exoquery:exoquery-runner-jdbc:LA.1.2.4.PL-LA.1.2.4")
+
+    implementation("io.exoquery:controller-core-jvm") {
+        version {
+            strictly("LM.3.2.2")
+        }
+    }
+    implementation("io.exoquery:controller-jdbc-jvm") {
+        version {
+            strictly("LM.3.2.2")
+        }
+    }
+
+    implementation("io.zonky.test:embedded-postgres:2.0.7")
 
     api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.0")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")

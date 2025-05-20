@@ -8,13 +8,13 @@ import java.time.LocalDateTime
 // A simple Value Object for unique identifiers
 @JvmInline
 @Serializable
-value class CustomerId(val value: Long)
+value class CustomerId(val value: Int)
 @JvmInline
 @Serializable
-value class ContactId(val value: String)
+value class ContactId(val value: Int)
 @JvmInline
 @Serializable
-value class NoteId(val value: String)
+value class NoteId(val value: Int)
 
 @Serializable
 data class Contact(

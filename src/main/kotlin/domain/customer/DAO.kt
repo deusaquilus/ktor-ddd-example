@@ -12,15 +12,17 @@ import java.time.LocalDateTime
 
 internal object DAO {
 
-  data class CustomerWithData(val customer: CustomerRow, val note: NoteRow, val contact: ContactRow)
-
   fun findById(id: CustomerId) = capture.select {
     val c = from(Table<CustomerRow>())
-    val n = join(Table<NoteRow>()) { n -> n.customerId == c.id }
-    val cr = join(Table<ContactRow>()) { co -> co.customerId == c.id }
+    val n = joinLeft(Table<NoteRow>()) { n -> n.customerId == c.id }
+    val cr = joinLeft(Table<ContactRow>()) { co -> co.customerId == c.id }
     where { c.id == paramCtx(id) }
     CustomerWithData(c, n, cr)
   }.buildPrettyFor.Postgres()
+
+  // Custom triple-type to make findById a bit easier
+  @Serializable
+  data class CustomerWithData(val customer: CustomerRow, val note: NoteRow?, val contact: ContactRow?)
 
   fun insertCustomer(c: CustomerRow) = capture {
     insert<CustomerRow> { setParams(c).excluding(id) }.returning { it.id }
@@ -40,7 +42,7 @@ internal object DAO {
 
   fun upsertNote(n: NoteRow) = capture {
     insert<NoteRow> {
-      setParams(n).onConflictUpdate(id, customerId) { excluded ->
+      setParams(n).onConflictUpdate(id) { excluded ->
         set(content to excluded.content)
       }
     }
@@ -52,7 +54,7 @@ internal object DAO {
 
   fun upsertContact(c: ContactRow) = capture {
     insert<ContactRow> {
-      setParams(c).onConflictUpdate(id, customerId) { excluded ->
+      setParams(c).onConflictUpdate(id) { excluded ->
         set(name to excluded.name, email to excluded.email, phone to excluded.phone)
       }
     }
@@ -86,7 +88,6 @@ internal object DAO {
   @Serializable
   data class NoteRow(
     val id: NoteId,
-    @Contextual
     val customerId: CustomerId,
     val content: String,
     @Serializable(with = LocalDateTimeSerializer::class)
@@ -95,7 +96,7 @@ internal object DAO {
     companion object {
       fun from(note: Note, customerId: CustomerId): NoteRow {
         return NoteRow(
-          id = note.id ?: NoteId("0"),
+          id = note.id ?: NoteId(0),
           customerId = customerId,
           content = note.content,
           createdAt = note.createdAt
@@ -108,6 +109,7 @@ internal object DAO {
   @SerialName("Contact")
   @Serializable
   data class ContactRow(
+    @Contextual
     val id: ContactId,
     @Contextual
     val customerId: CustomerId,
@@ -118,7 +120,7 @@ internal object DAO {
     companion object {
       fun from(contact: Contact, customerId: CustomerId): ContactRow {
         return ContactRow(
-          id = contact.id ?: ContactId("0"),
+          id = contact.id ?: ContactId(0),
           customerId = customerId,
           name = contact.name,
           email = contact.email.address,

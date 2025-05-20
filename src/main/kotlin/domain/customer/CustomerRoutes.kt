@@ -15,9 +15,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 
 
-fun Application.customerRoutes() {
+fun Application.customerRoutes(repository: CustomerRepository) {
     routing {
-        val repository = InMemoryCustomerRepository()
         val eventPublisher = EventPublisherImpl()
 
         //TODO: use the service in the routes below
@@ -37,7 +36,7 @@ fun Application.customerRoutes() {
 
             // Get customer by ID
             get("/{id}") {
-                val id = call.parameters["id"]?.toLongOrNull() ?: return@get call.respondText(
+                val id = call.parameters["id"]?.toIntOrNull() ?: return@get call.respondText(
                     "Missing or malformed id",
                     status = HttpStatusCode.BadRequest
                 )
@@ -52,7 +51,7 @@ fun Application.customerRoutes() {
 
             // Add contact to customer
             post("/{id}/contacts") {
-                val id = call.parameters["id"]?.toLongOrNull() ?: return@post call.respondText(
+                val id = call.parameters["id"]?.toIntOrNull() ?: return@post call.respondText(
                     "Missing or malformed id",
                     status = HttpStatusCode.BadRequest
                 )
@@ -75,7 +74,7 @@ fun Application.customerRoutes() {
 
             // Add note to customer
             post("/{id}/notes") {
-                val id = call.parameters["id"]?.toLongOrNull() ?: return@post call.respondText(
+                val id = call.parameters["id"]?.toIntOrNull() ?: return@post call.respondText(
                     "Missing or malformed id",
                     status = HttpStatusCode.BadRequest
                 )

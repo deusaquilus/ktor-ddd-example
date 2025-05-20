@@ -14,7 +14,7 @@ class CustomerService(
         return customerRepository.save(customer)
     }
 
-    suspend fun getCustomer(id: Long): Customer? {
+    suspend fun getCustomer(id: Int): Customer? {
         return customerRepository.findById(CustomerId(id))
     }
 

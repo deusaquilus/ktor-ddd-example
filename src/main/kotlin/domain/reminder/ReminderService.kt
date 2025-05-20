@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 // ReminderService encapsulates the business logic for creating and retrieving reminders.
 class ReminderService(private val reminderRepository: ReminderRepository) {
 
-    fun createReminder(customerId: CustomerId, noteId: String?, remindAt: LocalDateTime, message: String): Reminder {
+    fun createReminder(customerId: CustomerId, noteId: Int?, remindAt: LocalDateTime, message: String): Reminder {
         val reminder = Reminder(
             customerId = customerId,
             noteId = noteId?.let { NoteId(it) },

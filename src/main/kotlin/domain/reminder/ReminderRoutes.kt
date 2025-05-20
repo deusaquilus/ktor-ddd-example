@@ -3,6 +3,7 @@ package com.example.domain.reminder
 import com.example.domain.customer.CustomerId
 import domain.reminder.InMemoryReminderRepository
 import domain.reminder.Reminder
+import domain.reminder.ReminderRepository
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.request.receive
@@ -13,9 +14,8 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 
-fun Application.reminderRoutes() {
+fun Application.reminderRoutes(repository: ReminderRepository) {
     routing {
-        val repository = InMemoryReminderRepository()
         val service = ReminderService(repository)
 
         route("/reminders") {
@@ -48,7 +48,7 @@ fun Application.reminderRoutes() {
 
             // Get reminders for customer
             get("/customer/{customerId}") {
-                val customerId = call.parameters["customerId"]?.toLongOrNull() ?: return@get call.respondText(
+                val customerId = call.parameters["customerId"]?.toIntOrNull() ?: return@get call.respondText(
                     "Missing or malformed customerId",
                     status = HttpStatusCode.BadRequest
                 )

@@ -72,7 +72,7 @@ src/
 - `POST /reminders` - Create a new reminder
   ```json
   {
-    "customerId": {"value": "customer-uuid"},
+    "customerId": "customer-id",
     "noteId": null,
     "remindAt": "2024-01-01T10:00:00",
     "message": "Follow up with customer"
