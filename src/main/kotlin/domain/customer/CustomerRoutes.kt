@@ -10,6 +10,9 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import io.ktor.server.response.respond
 import io.ktor.server.routing.routing
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 
 
 fun Application.customerRoutes() {
@@ -23,9 +26,13 @@ fun Application.customerRoutes() {
         route("/customers") {
             // Create customer
             post {
-                val customer = call.receive<Customer>()
-                val createdCustomer = service.createCustomer(customer.name)
-                call.respond(HttpStatusCode.Created, createdCustomer)
+                val customerStr = call.receive<String>()
+
+              val customer = Json.decodeFromString<Customer>(customerStr)
+
+
+              val createdCustomer = service.createCustomer(customer.name)
+              call.respond(HttpStatusCode.Created, createdCustomer)
             }
 
             // Get customer by ID
@@ -50,7 +57,13 @@ fun Application.customerRoutes() {
                     status = HttpStatusCode.BadRequest
                 )
 
-                val contact = call.receive<Contact>()
+                val debug = call.receive<String>()
+                println(debug)
+
+                val c = Json.decodeFromString<Contact>(debug)
+                println(c)
+
+                val contact = c //call.receive<Contact>()
                 val updatedCustomer = service.addContact(CustomerId(id), contact)
 
                 if (updatedCustomer != null) {

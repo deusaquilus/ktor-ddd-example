@@ -9,17 +9,16 @@ class CustomerService(
     private val eventPublisher: EventPublisher
 ) {
 
-    fun createCustomer(name: String): Customer {
+    suspend fun createCustomer(name: String): Customer {
         val customer = Customer(name = name)
-        customerRepository.save(customer)
-        return customer
+        return customerRepository.save(customer)
     }
 
-    fun getCustomer(id: Long): Customer? {
+    suspend fun getCustomer(id: Long): Customer? {
         return customerRepository.findById(CustomerId(id))
     }
 
-    fun addContact(customerId: CustomerId, contact: Contact): Customer? {
+    suspend fun addContact(customerId: CustomerId, contact: Contact): Customer? {
         val customer = customerRepository.findById(customerId)
             ?: return null
 
@@ -34,7 +33,7 @@ class CustomerService(
     }
 
 
-    fun addNote(customerId: CustomerId, note: Note): Customer? {
+    suspend fun addNote(customerId: CustomerId, note: Note): Customer? {
         val customer = customerRepository.findById(customerId)
             ?: return null
 

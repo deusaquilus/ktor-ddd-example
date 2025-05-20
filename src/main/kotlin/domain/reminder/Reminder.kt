@@ -7,8 +7,9 @@ import serialization.LocalDateTimeSerializer
 import java.time.LocalDateTime
 import java.util.*
 
+@JvmInline
 @Serializable
-data class ReminderId(val value: Long)
+value class ReminderId(val value: Long)
 
 @Serializable
 data class Reminder(

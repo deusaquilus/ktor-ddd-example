@@ -1,5 +1,6 @@
 package com.example.domain.customer
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import serialization.LocalDateTimeSerializer
 import java.time.LocalDateTime
@@ -10,14 +11,14 @@ import java.time.LocalDateTime
 value class CustomerId(val value: Long)
 @JvmInline
 @Serializable
-value class ContactId(val value: Long)
+value class ContactId(val value: String)
 @JvmInline
 @Serializable
-value class NoteId(val value: Long)
+value class NoteId(val value: String)
 
 @Serializable
 data class Contact(
-    val id: ContactId,
+    val id: ContactId? = null,
     val name: String,
     val email: Email,  // could be 'Email' value object
     val phone: String
@@ -25,7 +26,7 @@ data class Contact(
 
 @Serializable
 data class Note(
-    val id: NoteId,
+    val id: NoteId? = null,
     val content: String,
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime = LocalDateTime.now()
@@ -46,6 +47,7 @@ data class Customer(
         return copy(notes = notes + note)
     }
 }
+
 
 // Example: a more complex value object for
 // Email might include validation logic.

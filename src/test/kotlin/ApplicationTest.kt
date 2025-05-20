@@ -27,14 +27,13 @@ class ApplicationTest {
             contentType(ContentType.Application.Json)
             setBody("""
                 {
-                    "name": "John Doe",
-                    "email": "john@example.com"
+                    "name": "John Doe"
                 }
             """.trimIndent())
         }
         assertEquals(HttpStatusCode.Created, response.status)
         val responseBody = response.bodyAsText()
-        val customerId = Json.parseToJsonElement(responseBody).jsonObject["id"]?.jsonObject?.get("value")?.jsonPrimitive?.content
+        val customerId = Json.parseToJsonElement(responseBody).jsonObject["id"]?.jsonPrimitive?.content
         assertNotNull(customerId)
 
         // Get customer
@@ -80,12 +79,11 @@ class ApplicationTest {
             contentType(ContentType.Application.Json)
             setBody("""
                 {
-                    "name": "John Doe",
-                    "email": "john@example.com"
+                    "name": "John Doe"
                 }
             """.trimIndent())
         }
-        val customerId = Json.parseToJsonElement(customerResponse.bodyAsText()).jsonObject["id"]?.jsonObject?.get("value")?.jsonPrimitive?.content
+        val customerId = Json.parseToJsonElement(customerResponse.bodyAsText()).jsonObject["id"]?.jsonPrimitive?.content
         assertNotNull(customerId)
 
         // Create reminder
@@ -93,15 +91,17 @@ class ApplicationTest {
             contentType(ContentType.Application.Json)
             setBody("""
                 {
-                    "customerId": {"value": "$customerId"},
+                    "customerId": $customerId,
                     "noteId": null,
                     "remindAt": "2024-01-01T10:00:00",
                     "message": "Test reminder"
                 }
             """.trimIndent())
         }
+
+        println(reminderResponse.bodyAsText())
         assertEquals(HttpStatusCode.Created, reminderResponse.status)
-        val reminderId = Json.parseToJsonElement(reminderResponse.bodyAsText()).jsonObject["id"]?.jsonObject?.get("value")?.jsonPrimitive?.content
+        val reminderId = Json.parseToJsonElement(reminderResponse.bodyAsText()).jsonObject["id"]?.jsonPrimitive?.content
         assertNotNull(reminderId)
 
         // Get reminder

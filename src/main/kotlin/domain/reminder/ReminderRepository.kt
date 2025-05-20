@@ -6,7 +6,7 @@ import com.example.domain.customer.CustomerId
 // Repository interface for Reminders.
 interface ReminderRepository {
     fun findById(id: ReminderId): Reminder?
-    fun save(reminder: Reminder)
+    fun save(reminder: Reminder): Reminder
     fun findByContact(customerId: CustomerId): List<Reminder>
 }
 
@@ -17,12 +17,13 @@ class InMemoryReminderRepository : ReminderRepository {
 
     override fun findById(id: ReminderId): Reminder? = reminders[id]
 
-    override fun save(reminder: Reminder) {
+    override fun save(reminder: Reminder): Reminder {
         val id = reminder.id ?: ReminderId(sequence.incrementAndGet().toLong())
-        reminders[id] = reminder.copy(id = id)
+        val reminderWithId = reminder.copy(id = id)
+        reminders[id] = reminderWithId
+        return reminderWithId
     }
 
     override fun findByContact(customerId: CustomerId): List<Reminder> =
         reminders.values.filter { it.customerId == customerId }
-
 }
