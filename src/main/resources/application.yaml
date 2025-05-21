@@ -4,3 +4,10 @@ ktor:
       - com.example.ApplicationKt.module
   deployment:
     port: 8080
+
+  database:
+    driver: org.postgresql.Driver
+    url: 'jdbc:postgresql://localhost:15432/postgres'
+    user: postgres
+    password: postgres
+    maxPoolSize: 10

@@ -1,0 +1,44 @@
+### Create new customer
+
+POST http://localhost:8080/customers
+Content-Type: application/json
+
+{
+    "name": "John Doe"
+}
+
+
+### Get all customers
+GET http://localhost:8080/customers
+Accept: application/json
+
+
+### Using the following customer id for the next requests
+
+@customer_id = 1
+
+### Get specific customer
+GET http://localhost:8080/customers/{{customer_id}}
+Accept: application/json
+
+
+### Add a contact to a customer
+
+
+POST http://localhost:8080/customers/{{customer_id}}/contacts
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "phone": "123-456-7890"
+}
+
+### Add a note to a customer
+
+POST http://localhost:8080/customers/{{customer_id}}/notes
+Content-Type: application/json
+
+{
+  "content": "This is a note for the customer."
+}

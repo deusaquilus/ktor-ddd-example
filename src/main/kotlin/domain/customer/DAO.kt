@@ -1,7 +1,6 @@
 package com.example.domain.customer
 
 import io.exoquery.capture
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import serialization.LocalDateTimeSerializer
@@ -16,7 +15,7 @@ internal object DAO {
     val c = from(Table<CustomerRow>())
     val n = joinLeft(Table<NoteRow>()) { n -> n.customerId == c.id }
     val cr = joinLeft(Table<ContactRow>()) { co -> co.customerId == c.id }
-    where { c.id == paramCtx(id) }
+    where { c.id == paramCustom(id, CustomerId.serializer()) }
     CustomerWithData(c, n, cr)
   }.buildPrettyFor.Postgres()
 
@@ -69,7 +68,6 @@ internal object DAO {
     @SerialName("Customer")
     @Serializable
     data class CustomerRow(
-        @Contextual // This should work, need to add a test for it! Also it should just work for a value class!
         val id: CustomerId,
         val name: String
     ) {
@@ -109,9 +107,7 @@ internal object DAO {
   @SerialName("Contact")
   @Serializable
   data class ContactRow(
-    @Contextual
     val id: ContactId,
-    @Contextual
     val customerId: CustomerId,
     val name: String,
     val email: String,

@@ -1,5 +1,4 @@
 -- data class CustomerRow(
---         @Contextual // This should work, need to add a test for it! Also it should just work for a value class!
 --         val id: CustomerId,
 --         val name: String
 --     )
@@ -11,7 +10,6 @@ create table if not exists customer (
 
 -- data class NoteRow(
 --     val id: NoteId,
---     @Contextual
 --     val customerId: CustomerId,
 --     val content: String,
 --     @Serializable(with = LocalDateTimeSerializer::class)
@@ -26,7 +24,6 @@ create table if not exists note (
 
 -- data class ContactRow(
 --     val id: ContactId,
---     @Contextual
 --     val customerId: CustomerId,
 --     val name: String,
 --     val email: String,

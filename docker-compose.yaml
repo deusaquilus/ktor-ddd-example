@@ -1,0 +1,11 @@
+services:
+  db:
+    container_name: ktor-ddd-example
+    image: postgres:9.6
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 15432:5432
+    volumes:
+      - ./src/main/sql:/docker-entrypoint-initdb.d/:ro
