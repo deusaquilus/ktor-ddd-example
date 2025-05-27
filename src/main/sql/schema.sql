@@ -36,3 +36,19 @@ create table if not exists contact (
     email text not null,
     phone text not null
 );
+
+-- data class Reminder(
+--     val id: ReminderId? = null,
+--     val customerId: CustomerId, // always links to a customer
+--     val noteId: NoteId?, // Optionally linked to a note
+--     @Serializable(with = LocalDateTimeSerializer::class)
+--     val remindAt: LocalDateTime,
+--     val message: String
+-- )
+create table if not exists reminder (
+    id serial primary key,
+    customerId int not null,
+    noteId int,
+    remindAt text not null,
+    message text not null
+);

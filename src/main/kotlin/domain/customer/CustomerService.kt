@@ -29,7 +29,7 @@ class CustomerService(
         // Publish a domain event to signal that a new contact has been added
         eventPublisher.publish(ContactAddedEvent(customerId, contact))
 
-        return updatedCustomer
+        return customerRepository.findById(customerId)
     }
 
 
@@ -43,6 +43,6 @@ class CustomerService(
         // Publish a domain event to signal about a new note
         eventPublisher.publish(NoteAddedEvent(customerId, note))
 
-        return updatedCustomer
+        return customerRepository.findById(customerId)
     }
 }

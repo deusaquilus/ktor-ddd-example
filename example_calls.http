@@ -8,11 +8,6 @@ Content-Type: application/json
 }
 
 
-### Get all customers
-GET http://localhost:8080/customers
-Accept: application/json
-
-
 ### Using the following customer id for the next requests
 
 @customer_id = 1
@@ -42,3 +37,23 @@ Content-Type: application/json
 {
   "content": "This is a note for the customer."
 }
+
+
+### Create a reminder
+
+# You can also use the `noteId` field to associate a reminder with a specific note.
+
+POST http://localhost:8080/reminders
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "noteId": null,
+  "remindAt": "2024-01-01T10:00:00",
+  "message": "Follow up with customer"
+}
+
+### Get all reminders for a customer
+
+GET http://localhost:8080/reminders/customer/{{customer_id}}
+Accept: application/json

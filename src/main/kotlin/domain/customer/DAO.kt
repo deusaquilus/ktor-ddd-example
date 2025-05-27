@@ -6,9 +6,11 @@ import kotlinx.serialization.Serializable
 import serialization.LocalDateTimeSerializer
 import java.time.LocalDateTime
 
-
-
-
+/**
+ * Persistence helpers for the JdbcCustomerRepository. The customer data-model
+ * is complex enough that we want to have a DAO pattern to separate the DB query logic
+ * and create custon row-types that help write data into the DB.
+ */
 internal object DAO {
 
   fun findById(id: CustomerId) = capture.select {

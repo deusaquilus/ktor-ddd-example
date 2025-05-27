@@ -6,6 +6,7 @@ import com.example.domain.reminder.reminderRoutes
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import domain.reminder.InMemoryReminderRepository
+import domain.reminder.JdbcReminderRepository
 import io.exoquery.controller.jdbc.JdbcControllers
 import io.exoquery.controller.runActions
 import io.ktor.serialization.kotlinx.json.json
@@ -25,13 +26,13 @@ fun Application.module() {
     }
 
     // To use the embedded postgres database use this:
-    //val ctx = runBlocking { setupEmbeddedDB() }
+    val ctx = runBlocking { setupEmbeddedDB() }
 
     // To use the docker postgres database use this:
-    val ctx = runBlocking { setupDockerDB(environment.config) }
+    //val ctx = runBlocking { setupDockerDB(environment.config) }
 
     val customerRepository = JdbcCustomerRepository(ctx)
-    val reminderRepository = InMemoryReminderRepository() // InMemoryCustomerRepository()
+    val reminderRepository = JdbcReminderRepository(ctx)
 
     routing {
         // Register routes from the domain subpackages

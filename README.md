@@ -1,10 +1,15 @@
 # Ktor DDD Example
 
-This is a demonstration project showcasing Domain-Driven Design (DDD) concepts implemented with Ktor framework. The project implements a mini-CRM system with customers and reminders functionality.
+This is a showcase of @antonarhipov's [ktor-ddd-example](https://github.com/antonarhipov/ktor-ddd-example) project
+with a full persistence model impelemented using ExoQuery. A docker-based Postgres database
+is included if you want to use a fully persistent database instance (an embedded Postgres database is used by default).
+
+Additionally, a `example_calls.http` file is included so you can easily try out the API endpoints in IntelliJ.
 
 ## Technologies Used
 
 - Kotlin
+- ExoQuery (Persistence layer)
 - Ktor (Web framework)
 - kotlinx.serialization (JSON serialization)
 - JUnit (Testing)
@@ -22,7 +27,8 @@ src/
 │       │   │   ├── Customer.kt   # Customer entity and value objects
 │       │   │   ├── CustomerRepository.kt
 │       │   │   ├── CustomerService.kt
-│       │   │   └── CustomerRoutes.kt
+│       │   │   ├── CustomerRoutes.kt
+|       |   |   └── DAO.kt        # DAO for customer operations
 │       │   └── reminder/         # Reminder domain
 │       │       ├── Reminder.kt   # Reminder entity
 │       │       ├── ReminderRepository.kt
@@ -39,13 +45,14 @@ src/
 
 ## API Endpoints
 
+See the example_calls.http file for an easy way to test out the API endpoints in IntelliJ.
+
 ### Customer Endpoints
 
 - `POST /customers` - Create a new customer
   ```json
   {
-    "name": "John Doe",
-    "email": "john@example.com"
+    "name": "John Doe"
   }
   ```
 
@@ -91,6 +98,19 @@ src/
    ./gradlew run
    ```
 3. The server will start at `http://localhost:8080`
+
+By default the application uses a embedded postgres database which will be recreated during server-startup.
+In order to use a fully persistent dockerized postgres, go app `Application.kt` and uncomment the line:
+```kotlin
+val ctx = runBlocking { setupDockerDB(environment.config) }
+```
+
+You can then start the dockerized postgres with using `./start_database.sh` and stop it with `./stop_database.sh`.
+
+## Running the Project from IntelliJ
+
+If you want to run/debug the application from IntelliJ, run the file `ApplicationRunner.kt` as a Kotlin application.
+It will start at `http://localhost:8080` the same was as the command line.
 
 ## Testing
 
