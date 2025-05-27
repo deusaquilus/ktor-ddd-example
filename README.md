@@ -1,7 +1,7 @@
 # Ktor DDD Example
 
 This is a showcase of @antonarhipov's [ktor-ddd-example](https://github.com/antonarhipov/ktor-ddd-example) project
-with a full persistence model impelemented using ExoQuery. A docker-based Postgres database
+with a full persistence model impelemented using [ExoQuery](https://github.com/ExoQuery/ExoQuery). A docker-based Postgres database
 is included if you want to use a fully persistent database instance (an embedded Postgres database is used by default).
 
 Additionally, a `example_calls.http` file is included so you can easily try out the API endpoints in IntelliJ.
