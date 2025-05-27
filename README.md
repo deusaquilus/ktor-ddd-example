@@ -6,6 +6,11 @@ is included if you want to use a fully persistent database instance (an embedded
 
 Additionally, a `example_calls.http` file is included so you can easily try out the API endpoints in IntelliJ.
 
+In the domain of this project there are two main aggregates: `Customer` and `Reminder`. The `Customer` aggregate
+is more complex so it requires a separate persistence model with DAO classes `CustomerRow`, `NoteRow` and `ContactRow`
+which assist in database insertion and retrieval. The `Reminder` aggregate is simpler and does not require
+separate persistence classes.
+
 ## Technologies Used
 
 - Kotlin

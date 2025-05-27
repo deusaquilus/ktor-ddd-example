@@ -30,10 +30,6 @@ internal object DAO {
   }.buildPrettyFor.Postgres()
 
   fun upsertCustomer(c: CustomerRow) = capture {
-      /*
-      e: file:///home/alexi/git/ktor-ddd-example/src/main/kotlin/domain/customer/DAO.kt:32:40 io.exoquery.ParseError: [ExoQuery] Could not understand an expression or query due to an error: Could not parse the expression inside of the action.
-      Not a useful error when they don't specify fields `setParams(c).onConflictUpdate` need to have an error saying they need to be specified
-       */
     insert<CustomerRow> {
       setParams(c).onConflictUpdate(id) { excluded ->
         set(name to excluded.name)
